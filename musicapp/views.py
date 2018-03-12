@@ -244,6 +244,8 @@ def song(request, artist_name, album_name, song_name):
     context_dict = dict()
     context_dict['page_title'] = song_name + ' by: ' + artist_name + ' on: ' + album_name
     context_dict['song_active'] = True
+
+    # Filling relevant content to form automatically.
     context_dict['comment_form'] = CommentForm({'author': request.user.username,
                                                 'artist': artist_name,
                                                 'album': album_name,
@@ -256,8 +258,10 @@ def song(request, artist_name, album_name, song_name):
                                               'song': song_name,
                                               'rating_page': 'song'})
 
+    # Searching detail information for specific artist.
     context_dict['detail'] = detail_song(song_name, album_name, artist_name)
 
+    # Filtering current rating value and comments for illustration.
     try:
         rates = Rating.objects.filter(Artist=artist_name,
                                       Album=album_name,
@@ -289,6 +293,8 @@ def song(request, artist_name, album_name, song_name):
 def artist(request, artist_name):
     context_dict = dict()
     context_dict['artist_active'] = True
+
+    # Filling relevant content to form automatically.
     context_dict['comment_form'] = CommentForm({'author': request.user.username,
                                                 'artist': artist_name,
                                                 'comment_page': 'artist'})
@@ -297,9 +303,12 @@ def artist(request, artist_name):
                                               'artist': artist_name,
                                               'rating_page': 'artist'})
 
+    # Searching detail information for specific artist.
     context_dict['detail'] = detail_artist(artist_name)
+    # Searching the albums related to this artist.
     context_dict['returned_list'] = run_query_artist(artist_name)
 
+    # Filtering current rating value and comments for illustration.
     try:
         rates = Rating.objects.filter(Artist=artist_name,
                                       Album='',
@@ -328,6 +337,8 @@ def artist(request, artist_name):
 def album(request, artist_name, album_name):
     context_dict = dict()
     context_dict['album_active'] = True
+
+    # Filling relevant content to form automatically.
     context_dict['comment_form'] = CommentForm({'author': request.user.username,
                                                 'artist': artist_name,
                                                 'album': album_name,
@@ -337,6 +348,8 @@ def album(request, artist_name, album_name):
                                               'artist': artist_name,
                                               'album': album_name,
                                               'rating_page': 'album'})
+
+    # Filtering current rating value and comments for illustration.
     try:
         rates = Rating.objects.filter(Artist=artist_name,
                                       Album=album_name,
@@ -369,6 +382,8 @@ def album(request, artist_name, album_name):
 def comment_post(request):
     if request.method == 'POST':
         comment_form = CommentForm(data=request.POST)
+
+        # Validating form content.
         if comment_form.is_valid():
             com = Comment.objects.create(Username=comment_form.cleaned_data["author"],
                                          Content=comment_form.cleaned_data["comment"],
@@ -380,6 +395,7 @@ def comment_post(request):
 
         else:
             return HttpResponse("Submit failed")
+
     if com.Comment_page == 'artist':
         return HttpResponseRedirect('/view' + '/' + com.Comment_page + '/' + com.Artist + '/' + com.Album)
     else:
@@ -390,6 +406,8 @@ def comment_post(request):
 def rating_post(request):
     if request.method == 'POST':
         rating_form = RatingForm(data=request.POST)
+
+        # Validating form content.
         if rating_form.is_valid():
             rate = Rating.objects.create(Username=rating_form.cleaned_data["author"],
                                          Artist=rating_form.cleaned_data["artist"],

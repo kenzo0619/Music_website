@@ -126,6 +126,8 @@ Process search songs/albums/artist
 2. Search in local database firstly
 3. If there is no information, then call Deezer API
 '''
+
+
 def run_query(name, next_link):
     returned_result = []
 
@@ -270,6 +272,7 @@ def run_query_artist(_artist_name):
 
 
 def detail_artist(_artist_name):
+    # Searching for detail information of the artist using api.
     singer_name = Artist.objects.get(ArtistSlug=_artist_name)
     artist_deezeer_id = str(singer_name.ArtistDeezerID)
     detail = requests.get("https://api.deezer.com/artist/" + artist_deezeer_id)
@@ -279,6 +282,7 @@ def detail_artist(_artist_name):
 
 
 def detail_song(_song_name, _album_name, _artist_name):
+    # Searching for detail information of the song using api.
     artist_name = Artist.objects.get(ArtistSlug=_artist_name)
     album_name = Album.objects.get(AlbumSlug=_album_name, Artist=artist_name)
     song_name = Song.objects.get(SongSlug=_song_name, Artist=artist_name, Album=album_name)

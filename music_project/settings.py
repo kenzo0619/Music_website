@@ -30,6 +30,7 @@ SECRET_KEY = '9i_44ls*6^ym%)syhw8$e7z9dx4j2m==w17lub@b!&c!g&&%4e'
 DEBUG = True
 
 ALLOWED_HOSTS = ['itechmusicapp.pythonanywhere.com']
+#ALLOWED_HOSTS = ["127.0.0.1"]
 
 
 # Application definition
